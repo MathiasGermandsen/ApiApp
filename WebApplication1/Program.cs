@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using WebApplication1.Data;
 
 namespace WebApplication1
@@ -16,10 +17,7 @@ namespace WebApplication1
             {
                 options.AddPolicy(
                     name: MyAllowSpecificOrigins,
-                    policy =>
-                    {
-                        policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-                    }
+                    policy => { policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); }
                 );
             });
 
@@ -29,10 +27,13 @@ namespace WebApplication1
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            IConfiguration Configuration = builder.Configuration;
             // Configure Entity Framework with PostgreSQL
+            string connectionString = Configuration.GetConnectionString("DefaultConnection")
+                                      ?? Environment.GetEnvironmentVariable("DefaultConnection");
+
             builder.Services.AddDbContext<DatabaseContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(connectionString));
 
             var app = builder.Build();
 
