@@ -32,7 +32,6 @@
 /Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/obj/Debug/net7.0/WebApplication1.genruntimeconfig.cache
 /Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/obj/Debug/net7.0/ref/WebApplication1.dll
 /Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/bin/Debug/net7.0/Newtonsoft.Json.dll
-/Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/bin/Debug/net7.0/config.json
 /Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/bin/Debug/net7.0/Humanizer.dll
 /Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/bin/Debug/net7.0/Microsoft.EntityFrameworkCore.dll
 /Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/bin/Debug/net7.0/Microsoft.EntityFrameworkCore.Abstractions.dll
