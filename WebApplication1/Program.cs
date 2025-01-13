@@ -63,6 +63,7 @@ namespace WebApplication1
                 context.Response.Redirect("/swagger");
                 await Task.CompletedTask;
             });
+            
             app.Run();
         }
     }
