@@ -56,9 +56,13 @@ namespace WebApplication1
 
             //app.UseAuthorization();
 
-
+            
             app.MapControllers();
-
+            app.MapGet("/", async context => 
+            {
+                context.Response.Redirect("/swagger");
+                await Task.CompletedTask;
+            });
             app.Run();
         }
     }
