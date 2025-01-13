@@ -10,6 +10,7 @@ public class User : Common
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public int Age { get; set; }
-    // public List<int> Cars { get; set; }
+    
+    public List<Car> Cars { get; set; } = new List<Car>();
     
 }

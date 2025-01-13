@@ -7,6 +7,7 @@ public class Car : Common
     public string Model { get; set; }
     public string Type { get; set; }
     public string Fuel { get; set; }
-    // public User Owners { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
     
 }

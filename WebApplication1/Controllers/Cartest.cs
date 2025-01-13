@@ -23,9 +23,16 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest("Count must be greater than 0.");
             }
-
-            List<Car> fakeCars = Classes.FakeCarGenerator.GenerateCars(count);
             
+            var validUserIds = _context.Users.Select(u => u.Id).ToList();
+
+            if (!validUserIds.Any())
+            {
+                return BadRequest("No users available in the database to associate cars with.");
+            }
+                
+            List<Car> fakeCars = Classes.FakeCarGenerator.GenerateCars(count, validUserIds);
+
             _context.Cars.AddRange(fakeCars);
             _context.SaveChanges();
 
