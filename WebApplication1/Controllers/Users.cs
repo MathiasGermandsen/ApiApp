@@ -43,17 +43,27 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost ("Create")]
-        public async Task<IActionResult> CreateHuman([FromBody] User user)
+        public async Task<IActionResult> CreateHuman([FromBody] UserDTO userdto)
         {
-            if (user == null)
+            if (userdto == null)
             {
                 return BadRequest("Human already exists");
             }
 
-            _context.Users.Add(user);
+            User userToAdd = new User()
+            {
+                Name = userdto.Name,
+                Lastname = userdto.Lastname,
+                Email = userdto.Email,
+                PhoneNumber = userdto.PhoneNumber,
+                Age = userdto.Age,
+                Cars = new List<Car>()
+            };
+
+            _context.Users.Add(userToAdd);
 
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetAllUsers), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetAllUsers), new { id = userToAdd.Id }, userToAdd);
         }
 
         [HttpPut ("Update/{id}")]

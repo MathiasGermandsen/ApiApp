@@ -14,3 +14,12 @@ public class User : Common
     public List<Car> Cars { get; set; } = new List<Car>();
     
 }
+
+public class UserDTO
+{
+    public string Name { get; set; }
+    public string Lastname { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public int Age { get; set; }
+}
