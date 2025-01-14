@@ -17,7 +17,7 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet ("Read")]
         public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 100)
         {
             if (pageNumber < 1 || pageSize < 1)
@@ -42,7 +42,7 @@ namespace WebApplication1.Controllers
             return Ok(users);
         }
 
-        [HttpPost]
+        [HttpPost ("Create")]
         public async Task<IActionResult> CreateHuman([FromBody] User user)
         {
             if (user == null)
@@ -56,7 +56,7 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(GetAllUsers), new { id = user.Id }, user);
         }
 
-        [HttpPut]
+        [HttpPut ("Update/{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
         {
             if (id != updatedUser.Id)
@@ -89,7 +89,7 @@ namespace WebApplication1.Controllers
             }
         }
         
-        [HttpDelete("{id}")]
+        [HttpDelete ("delete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -104,7 +104,7 @@ namespace WebApplication1.Controllers
             return NoContent(); // HTTP 204
         }
         
-        [HttpPatch("{id}")]
+        [HttpPatch("Patch/{id}")]
         public async Task<IActionResult> PatchUser(int id, [FromQuery] string name = null, [FromQuery] string email = null)
         {
             var user = await _context.Users.FindAsync(id);

@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("read")]
         public async Task<IActionResult> GetAllCars([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 100)
         {
             if (pageNumber < 1 || pageSize < 1)
@@ -36,20 +36,12 @@ namespace WebApplication1.Controllers
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+            
 
-            var response = new
-            {
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalCars = totalCars,
-                TotalPages = totalPages,
-                Cars = cars
-            };
-
-            return Ok(response);
+            return Ok(cars);
         }
 
-        [HttpPost]
+        [HttpPost("Create/{id}")]
         public async Task<IActionResult> CreateCar([FromBody] Car car)
         {
             if (car == null)
@@ -62,7 +54,7 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(GetAllCars), new { id = car.Id }, car);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateCar(int id, [FromBody] Car updatedCar)
         {
             if (id != updatedCar.Id)
@@ -95,7 +87,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteCar(int id)
         {
             var car = await _context.Cars.FindAsync(id);
@@ -110,7 +102,7 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("Patch/{id}")]
         public async Task<IActionResult> PatchCar(int id, [FromQuery] string manufacturer = null, [FromQuery] string model = null)
         {
             var car = await _context.Cars.FindAsync(id);
