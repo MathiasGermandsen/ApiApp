@@ -38,16 +38,8 @@ namespace WebApplication1.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            var response = new
-            {
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalUsers = totalUsers,
-                TotalPages = totalPages,
-                Users = users
-            };
 
-            return Ok(response);
+            return Ok(users);
         }
 
         [HttpPost]
