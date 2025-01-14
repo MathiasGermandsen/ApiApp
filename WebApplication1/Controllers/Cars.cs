@@ -42,16 +42,25 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("Create/{id}")]
-        public async Task<IActionResult> CreateCar([FromBody] Car car)
+        public async Task<IActionResult> CreateCar([FromBody] CarDTO cardto)
         {
-            if (car == null)
+            if (cardto == null)
             {
                 return BadRequest("Car data is required.");
             }
 
-            _context.Cars.Add(car);
+            Car carToAdd = new Car()
+            {
+                Vin = cardto.Vin,
+                Manufacturer = cardto.Manufacturer,
+                Model = cardto.Model,
+                Type = cardto.Type,
+                Fuel = cardto.Fuel,
+            };
+
+            _context.Cars.Add(carToAdd);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetAllCars), new { id = car.Id }, car);
+            return CreatedAtAction(nameof(GetAllCars), new { id = carToAdd.Id }, carToAdd);
         }
 
         [HttpPut("Update/{id}")]
