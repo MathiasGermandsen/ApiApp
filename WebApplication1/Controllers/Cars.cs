@@ -41,21 +41,26 @@ namespace WebApplication1.Controllers
             return Ok(cars);
         }
 
-        [HttpPost("Create/{id}")]
-        public async Task<IActionResult> CreateCar([FromBody] CarDTO cardto)
+        [HttpPost("Create")]
+        public async Task<IActionResult> CreateCar(
+            [FromQuery] string vin, 
+            [FromQuery] string manufacturer, 
+            [FromQuery] string model, 
+            [FromQuery] string type, 
+            [FromQuery] string fuel)
         {
-            if (cardto == null)
+            if (string.IsNullOrWhiteSpace(vin) || string.IsNullOrWhiteSpace(manufacturer) || string.IsNullOrWhiteSpace(model))
             {
-                return BadRequest("Car data is required.");
+                return BadRequest("Required car data is missing.");
             }
 
             Car carToAdd = new Car()
             {
-                Vin = cardto.Vin,
-                Manufacturer = cardto.Manufacturer,
-                Model = cardto.Model,
-                Type = cardto.Type,
-                Fuel = cardto.Fuel,
+                Vin = vin,
+                Manufacturer = manufacturer,
+                Model = model,
+                Type = type,
+                Fuel = fuel,
             };
 
             _context.Cars.Add(carToAdd);
@@ -64,24 +69,18 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdateCar(int id, [FromBody] Car updatedCar)
+        public async Task<IActionResult> UpdateCar(int id, [FromQuery] CarDTO carDto)
         {
-            if (id != updatedCar.Id)
-                return BadRequest("Car ID mismatch");
-
             var car = await _context.Cars.FindAsync(id);
             if (car == null)
                 return NotFound($"Car with ID {id} not found");
 
-            // Use reflection to dynamically update properties
-            foreach (var property in typeof(Car).GetProperties())
-            {
-                var updatedValue = property.GetValue(updatedCar);
-                if (updatedValue != null && property.CanWrite)
-                {
-                    property.SetValue(car, updatedValue);
-                }
-            }
+            // Update properties based on the provided DTO
+            if (!string.IsNullOrWhiteSpace(carDto.Vin)) car.Vin = carDto.Vin;
+            if (!string.IsNullOrWhiteSpace(carDto.Manufacturer)) car.Manufacturer = carDto.Manufacturer;
+            if (!string.IsNullOrWhiteSpace(carDto.Model)) car.Model = carDto.Model;
+            if (!string.IsNullOrWhiteSpace(carDto.Type)) car.Type = carDto.Type;
+            if (!string.IsNullOrWhiteSpace(carDto.Fuel)) car.Fuel = carDto.Fuel;
 
             _context.Entry(car).State = EntityState.Modified;
 

@@ -43,20 +43,25 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost ("Create")]
-        public async Task<IActionResult> CreateHuman([FromBody] UserDTO userdto)
+        public async Task<IActionResult> CreateHuman(
+            [FromQuery] string name, 
+            [FromQuery] string lastname, 
+            [FromQuery] string email, 
+            [FromQuery] string phoneNumber, 
+            [FromQuery] int age)
         {
-            if (userdto == null)
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email))
             {
-                return BadRequest("Human already exists");
+                return BadRequest("Missing required parameters");
             }
 
             User userToAdd = new User()
             {
-                Name = userdto.Name,
-                Lastname = userdto.Lastname,
-                Email = userdto.Email,
-                PhoneNumber = userdto.PhoneNumber,
-                Age = userdto.Age,
+                Name = name,
+                Lastname = lastname,
+                Email = email,
+                PhoneNumber = phoneNumber,
+                Age = age,
                 Cars = new List<Car>()
             };
 
@@ -66,25 +71,25 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(GetAllUsers), new { id = userToAdd.Id }, userToAdd);
         }
 
-        [HttpPut ("Update/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdateUser(
+            int id, 
+            [FromQuery] string? name, 
+            [FromQuery] string? lastname, 
+            [FromQuery] string? email, 
+            [FromQuery] string? phoneNumber, 
+            [FromQuery] int? age)
         {
-            if (id != updatedUser.Id)
-                return BadRequest("User ID mismatch");
-
             var user = await _context.Users.FindAsync(id);
             if (user == null)
                 return NotFound($"User with ID {id} not found");
 
-            // Use reflection to dynamically update properties
-            foreach (var property in typeof(User).GetProperties())
-            {
-                var updatedValue = property.GetValue(updatedUser);
-                if (updatedValue != null && property.CanWrite)
-                {
-                    property.SetValue(user, updatedValue);
-                }
-            }
+            // Update properties if they are provided
+            if (!string.IsNullOrWhiteSpace(name)) user.Name = name;
+            if (!string.IsNullOrWhiteSpace(lastname)) user.Lastname = lastname;
+            if (!string.IsNullOrWhiteSpace(email)) user.Email = email;
+            if (!string.IsNullOrWhiteSpace(phoneNumber)) user.PhoneNumber = phoneNumber;
+            if (age.HasValue) user.Age = age.Value;
 
             _context.Entry(user).State = EntityState.Modified;
 
