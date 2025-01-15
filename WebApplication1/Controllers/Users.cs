@@ -71,37 +71,52 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(GetAllUsers), new { id = userToAdd.Id }, userToAdd);
         }
 
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdateUser(
-            int id, 
-            [FromQuery] string? name, 
-            [FromQuery] string? lastname, 
-            [FromQuery] string? email, 
-            [FromQuery] string? phoneNumber, 
-            [FromQuery] int? age)
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdateUser([FromQuery] int id, [FromQuery] UserDTO userDTO)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound($"User with ID {id} not found");
+            var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            // Update properties if they are provided
-            if (!string.IsNullOrWhiteSpace(name)) user.Name = name;
-            if (!string.IsNullOrWhiteSpace(lastname)) user.Lastname = lastname;
-            if (!string.IsNullOrWhiteSpace(email)) user.Email = email;
-            if (!string.IsNullOrWhiteSpace(phoneNumber)) user.PhoneNumber = phoneNumber;
-            if (age.HasValue) user.Age = age.Value;
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
+            if (userToUpdate == null)
             {
-                await _context.SaveChangesAsync();
-                return NoContent();
+                return NotFound("User not found.");
             }
-            catch (DbUpdateConcurrencyException)
+
+            if (userDTO == null)
             {
-                return StatusCode(500, "An error occurred while updating the user");
+                return BadRequest("Invalid data.");
             }
+
+            // Update fields if new values are provided
+            if (!string.IsNullOrEmpty(userDTO.Name))
+            {
+                userToUpdate.Name = userDTO.Name;
+            }
+
+            if (!string.IsNullOrEmpty(userDTO.Lastname))
+            {
+                userToUpdate.Lastname = userDTO.Lastname;
+            }
+
+            if (!string.IsNullOrEmpty(userDTO.Email))
+            {
+                userToUpdate.Email = userDTO.Email;
+            }
+
+            if (!string.IsNullOrEmpty(userDTO.PhoneNumber))
+            {
+                userToUpdate.PhoneNumber = userDTO.PhoneNumber;
+            }
+
+            if (userDTO.Age > 0)
+            {
+                userToUpdate.Age = userDTO.Age;
+            }
+
+            _context.Users.Update(userToUpdate);
+            await _context.SaveChangesAsync();
+
+            return Ok(userToUpdate);
         }
         
         [HttpDelete ("delete/{id}")]
