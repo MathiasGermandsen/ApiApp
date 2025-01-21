@@ -11,7 +11,7 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250113094632_Users")]
+    [Migration("20250121090047_Users")]
     partial class Users
     {
         /// <inheritdoc />
@@ -59,39 +59,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Car");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Room", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Fuel")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Manufacturer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Vin")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rooms");
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.User", b =>
@@ -123,7 +91,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Car", b =>

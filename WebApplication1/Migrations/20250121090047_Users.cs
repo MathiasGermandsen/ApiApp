@@ -12,24 +12,7 @@ namespace WebApplication1.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Rooms",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Vin = table.Column<int>(type: "integer", nullable: false),
-                    Manufacturer = table.Column<string>(type: "text", nullable: false),
-                    Model = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    Fuel = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rooms", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -42,11 +25,11 @@ namespace WebApplication1.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Car",
+                name: "Cars",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -60,18 +43,18 @@ namespace WebApplication1.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Car", x => x.Id);
+                    table.PrimaryKey("PK_Cars", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Car_User_UserId",
+                        name: "FK_Cars_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_UserId",
-                table: "Car",
+                name: "IX_Cars_UserId",
+                table: "Cars",
                 column: "UserId");
         }
 
@@ -79,13 +62,10 @@ namespace WebApplication1.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "Cars");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
-
-            migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }
