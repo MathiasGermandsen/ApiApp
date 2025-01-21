@@ -1568,11 +1568,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/WebApplication1.csproj",
+      "projectUniqueName": "/Users/mathias.germandsen/RiderProjects/ApiApp/WebApplication1/WebApplication1.csproj",
       "projectName": "WebApplication1",
-      "projectPath": "/Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/WebApplication1.csproj",
+      "projectPath": "/Users/mathias.germandsen/RiderProjects/ApiApp/WebApplication1/WebApplication1.csproj",
       "packagesPath": "/Users/mathias.germandsen/.nuget/packages/",
-      "outputPath": "/Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/obj/",
+      "outputPath": "/Users/mathias.germandsen/RiderProjects/ApiApp/WebApplication1/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/mathias.germandsen/.nuget/NuGet/NuGet.Config"

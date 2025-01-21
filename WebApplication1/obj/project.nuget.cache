@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Np+kiCADMrLxnxWMu9A2mddtAjPmo7Oc7EB/CImIYwQ+SMvbtzQkofcCOi4k0JbW3y5tWNFkrvu50lilSxrBHA==",
+  "dgSpecHash": "TPDWDLBPKJc=",
   "success": true,
-  "projectFilePath": "/Users/mathias.germandsen/RiderProjects/WebApplication1/WebApplication1/WebApplication1.csproj",
+  "projectFilePath": "/Users/mathias.germandsen/RiderProjects/ApiApp/WebApplication1/WebApplication1.csproj",
   "expectedPackageFiles": [
     "/Users/mathias.germandsen/.nuget/packages/bogus/35.6.1/bogus.35.6.1.nupkg.sha512",
     "/Users/mathias.germandsen/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
