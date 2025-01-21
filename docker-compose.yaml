@@ -1,34 +1,17 @@
 ﻿version: '3.8'
-
 services:
-  webapplication:
-    image: webapplication:latest
+  webapplication1:
+    container_name: webapplication1
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: WebApplication1/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Release
+
     ports:
       - "80:80"
-      - "443:443"
+
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-    volumes:
-      - ./logs:/app/logs
-    restart: always
+      ASPNETCORE_URLS: "http://+:80"
 
-  webapplication1:
-    image: webapplication1
-    build:
-      context: .
-      dockerfile: WebApplication1/Dockerfile
-
-  webapplication1-1:
-    image: webapplication1-1
-    build:
-      context: .
-      dockerfile: WebApplication1/Dockerfile
-
-  webapplication1-2:
-    image: webapplication1-2
-    build:
-      context: .
-      dockerfile: WebApplication1/Dockerfile
+    restart: unless-stopped
