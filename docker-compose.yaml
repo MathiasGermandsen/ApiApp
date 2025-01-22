@@ -2,7 +2,7 @@ version: '3.8'
 services:
   webapplication1:
     # Instead of build, use the image you pushed
-    image: myrepo/webapplication1:latest
+    image: api_app_stack:latest
 
     # Publish container port 80 on the host
     ports:
