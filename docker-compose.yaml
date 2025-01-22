@@ -1,16 +1,15 @@
 version: '3.8'
 services:
   webapplication1:
-    # Instead of build, use the image you pushed
-    image: api_app_stack:latest
-
-    # Publish container port 80 on the host
+    image: myrepo/webapplication1:latest
     ports:
       - "80:80"
-
-    environment:
-      ASPNETCORE_URLS: "http://+:80"
-
+    secrets:
+      - db_connection
     deploy:
       restart_policy:
-        condition: any
+        condition: on-failure
+
+secrets:
+  DefaultConnection:
+    external: true
