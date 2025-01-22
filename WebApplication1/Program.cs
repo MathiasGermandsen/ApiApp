@@ -35,9 +35,6 @@ namespace WebApplication1
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            string connectionString = Configuration.GetConnectionString("DefaultConnection")
-    ?? Environment.GetEnvironmentVariable("DefaultConnection");
-
             var app = builder.Build();
 
             app.UseCors(MyAllowSpecificOrigins);
@@ -61,34 +58,13 @@ namespace WebApplication1
 
 
             app.MapControllers();
-            app.MapGet("/", async context => 
+            app.MapGet("/", async context =>
             {
                 context.Response.Redirect("/swagger");
                 await Task.CompletedTask;
             });
-            
+
             app.Run();
-        }
-    }
-        
-        private static void ApplyMigrations(WebApplication app)
-        {
-            using (var scope = app.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                
-                var pendingMigrations = dbContext.Database.GetPendingMigrations();
-                if (pendingMigrations.Any())
-                {
-                    Console.WriteLine("Applying pending migrations...");
-                    dbContext.Database.Migrate();
-                    Console.WriteLine("Migrations applied successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("No pending migrations found.");
-                }
-            }
         }
     }
 }
