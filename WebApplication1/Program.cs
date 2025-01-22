@@ -70,20 +70,10 @@ namespace WebApplication1
         {
             using (var scope = app.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
-                var pendingMigrations = dbContext.Database.GetPendingMigrations();
-                if (pendingMigrations.Any())
-                {
-                    Console.WriteLine("Applying pending migrations...");
-                    dbContext.Database.Migrate();
-                    Console.WriteLine("Migrations applied successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("No pending migrations found.");
-                }
+                var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
+                dbContext.Database.Migrate();
             }
         }
+        
     }
 }
