@@ -5,7 +5,7 @@ services:
     ports:
       - "80:80"
     secrets:
-      - db_connection
+      - DefaultConnection
     deploy:
       restart_policy:
         condition: on-failure
