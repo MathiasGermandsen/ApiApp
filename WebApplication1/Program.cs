@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using WebApplication1.Data;
 
 namespace WebApplication1
@@ -21,13 +20,14 @@ namespace WebApplication1
                 );
             });
 
-            // Add services to the container.
-
+            // Add services to the container
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Read config
             IConfiguration Configuration = builder.Configuration;
+
             // Configure Entity Framework with PostgreSQL
             string connectionString = Configuration.GetConnectionString("DefaultConnection")
                                       ?? Environment.GetEnvironmentVariable("DefaultConnection");
@@ -37,10 +37,12 @@ namespace WebApplication1
 
             var app = builder.Build();
 
+            // **Apply migrations** at startup
+            ApplyMigrations(app);
+
             app.UseCors(MyAllowSpecificOrigins);
 
             // Configure the HTTP request pipeline.
-            // Swagger link: https://apiexampleproject.onrender.com/swagger/index.html
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -52,12 +54,9 @@ namespace WebApplication1
                 app.UseSwaggerUI();
             }
 
-            //app.UseHttpsRedirection();
-
-            //app.UseAuthorization();
-
-
             app.MapControllers();
+
+            // Redirect root to swagger
             app.MapGet("/", async context =>
             {
                 context.Response.Redirect("/swagger");
@@ -65,6 +64,26 @@ namespace WebApplication1
             });
 
             app.Run();
+        }
+
+        private static void ApplyMigrations(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                var pendingMigrations = dbContext.Database.GetPendingMigrations();
+                if (pendingMigrations.Any())
+                {
+                    Console.WriteLine("Applying pending migrations...");
+                    dbContext.Database.Migrate();
+                    Console.WriteLine("Migrations applied successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("No pending migrations found.");
+                }
+            }
         }
     }
 }
