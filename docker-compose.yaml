@@ -31,11 +31,9 @@ services:
 
     environment:
       ASPNETCORE_URLS: "http://+:80"
-      DefaultConnection: "Host=db;Port=5432;Database=MyDatabase;Username=MyUser;Password=MyPassword"
 
     depends_on:
-      db:
-        condition: service_healthy
+      - db
 
 volumes:
   db_data:
