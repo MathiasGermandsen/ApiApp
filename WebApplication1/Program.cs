@@ -35,6 +35,9 @@ namespace WebApplication1
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseNpgsql(connectionString));
 
+            string connectionString = Configuration.GetConnectionString("DefaultConnection")
+    ?? Environment.GetEnvironmentVariable("DefaultConnection");
+
             var app = builder.Build();
 
             app.UseCors(MyAllowSpecificOrigins);
