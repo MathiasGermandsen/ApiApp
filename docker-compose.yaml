@@ -1,17 +1,16 @@
-﻿version: '3.8'
+version: '3.8'
 services:
   webapplication1:
-    container_name: webapplication1
-    build:
-      context: .
-      dockerfile: WebApplication1/Dockerfile
-      args:
-        BUILD_CONFIGURATION: Release
+    # Instead of build, use the image you pushed
+    image: myrepo/webapplication1:latest
 
+    # Publish container port 80 on the host
     ports:
       - "80:80"
 
     environment:
       ASPNETCORE_URLS: "http://+:80"
 
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: any
