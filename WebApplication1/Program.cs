@@ -26,7 +26,7 @@ namespace WebApplication1
 
             // Configure Entity Framework with PostgreSQL
             string connectionString = Configuration.GetConnectionString("DefaultConnection")
-                                      ?? Environment.GetEnvironmentVariable("DefaultConnection");
+                           ?? Environment.GetEnvironmentVariable("DefaultConnection");
 
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseNpgsql(connectionString));
