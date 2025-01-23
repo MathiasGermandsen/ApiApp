@@ -11,38 +11,44 @@ namespace WebApplication1
 
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-            // Specify when frontend is created
+            // Configure CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(
                     name: MyAllowSpecificOrigins,
-                    policy => { policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); }
+                    policy =>
+                    {
+                        policy
+                            .WithOrigins("*")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    }
                 );
             });
 
-            // Add services to the container
+            // Add controllers and swagger
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            
 
-            // Read config
-            IConfiguration Configuration = builder.Configuration;
+            string connectionString =
+                builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? Environment.GetEnvironmentVariable("DefaultConnection");
 
-            // Configure Entity Framework with PostgreSQL
-            string connectionString = Configuration.GetConnectionString("DefaultConnection")
-                                      ?? Environment.GetEnvironmentVariable("DefaultConnection");
-
+            // Register DbContext
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseNpgsql(connectionString));
 
             var app = builder.Build();
 
-            // **Apply migrations** at startup
+            // Apply migrations at startup
             ApplyMigrations(app);
 
+            // Use CORS
             app.UseCors(MyAllowSpecificOrigins);
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -50,6 +56,7 @@ namespace WebApplication1
             }
             else
             {
+                // Right now, it's the same logic in production
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
@@ -70,10 +77,10 @@ namespace WebApplication1
         {
             using (var scope = app.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
+                // Important: use the same DbContext type you registered above
+                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 dbContext.Database.Migrate();
             }
         }
-        
     }
 }
