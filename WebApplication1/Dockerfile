@@ -1,29 +1,28 @@
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
+# Copy only the project file and restore dependencies
 COPY ["WebApplication1/WebApplication1.csproj", "WebApplication1/"]
 RUN dotnet restore "WebApplication1/WebApplication1.csproj"
 
+# Copy the rest of the source code and build the application
 COPY . .
 WORKDIR "/src/WebApplication1"
 RUN dotnet build "WebApplication1.csproj" -c Release -o /app/build
 
+# Stage 2: Publish
 FROM build AS publish
 WORKDIR /src/WebApplication1
-RUN dotnet publish "WebApplication1.csproj" -c Release -o /app/publish /p:UseAppHost=true
+RUN dotnet publish "WebApplication1.csproj" -c Release -o /app/publish /p:UseAppHost=false /p:PublishTrimmed=true /p:PublishSingleFile=true /p:EnableCompressionInSingleFile=true
 
-FROM alpine:3.18 AS compress
-RUN apk add --no-cache upx
-WORKDIR /compressed
-
-COPY --from=publish /app/publish .
-
-RUN find . -type f -name "*.dll" -exec upx --best --lzma {} \;
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
+# Stage 3: Final (Minimal Runtime Image)
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0 AS final
 WORKDIR /app
 
-COPY --from=compress /compressed .
+# Copy only the published output from the previous stage
+COPY --from=publish /app/publish .
 
+# Expose port 80 and set the entry point
 EXPOSE 80
-ENTRYPOINT ["dotnet", "WebApplication1.dll"]
+ENTRYPOINT ["./WebApplication1"]
