@@ -20,7 +20,7 @@ services:
       retries: 5
 
   webapplication1:
-    image: apiapp:1.2
+    image: api_app_db:latest
     ports:
       - "80:80"
     environment:
