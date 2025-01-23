@@ -24,7 +24,7 @@ services:
     ports:
       - "80:80"
     environment:
-      DefaultConnectio: Host=db;Port=5432;Database=MyDatabase;Username=MyUser;Password=MyPassword
+      DefaultConnection: Host=db;Port=5432;Database=MyDatabase;Username=MyUser;Password=MyPassword
       ASPNETCORE_URLS: "http://+:80"
     
     depends_on:
