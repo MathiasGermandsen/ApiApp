@@ -17,13 +17,13 @@ services:
       retries: 5
 
   webapplication1:
-    image: apiapp_swarm:latest
-      
+    build:
+      context: .
+      dockerfile: WebApplication1/Dockerfile
     ports:
       - "80:80"
     environment:
-      # This environment variable will become Configuration["ConnectionStrings:DefaultConnection"]
-      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=MyDatabase;Username=MyUser;Password=MyPassword"
+      DefaultConnection: "Host=db;Port=5432;Database=MyDatabase;Username=MyUser;Password=MyPassword"
     depends_on:
       - db
 
