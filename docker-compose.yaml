@@ -6,9 +6,9 @@ services:
       restart_policy:
         condition: on-failure
     environment:
-      POSTGRES_USER: MyUser
-      POSTGRES_PASSWORD: MyPassword
-      POSTGRES_DB: MyDatabase
+      - POSTGRES_USER=MyUser
+      - POSTGRES_PASSWORD=MyPassword
+      - POSTGRES_DB=MyDatabase
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
@@ -24,7 +24,8 @@ services:
     ports:
       - "80:80"
     environment:
-      ASPNETCORE_URLS: "http://+:80"
+      - DefaultConnectiom=Host=db;Port=5432;Database=MyDatabase;Username=MyUser;Password=MyPassword
+      - ASPNETCORE_URLS="http://+:80"
     
     depends_on:
       - db
