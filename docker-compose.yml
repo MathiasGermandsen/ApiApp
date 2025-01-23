@@ -17,10 +17,8 @@ services:
       retries: 5
 
   webapplication1:
-    # Build from our Dockerfile in the current directory (adjust if needed)
-    build:
-      context: .
-      dockerfile: WebApplication1/Dockerfile
+    image: apiapp_swarm:latest
+      
     ports:
       - "80:80"
     environment:
